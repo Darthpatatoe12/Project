@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Search for a School</h2>
+    <input type="text" id="schoolInput" placeholder="Enter school name (e.g., Cypress HS)">
+    <button onclick="findSchool()">Search</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    // JavaScript equivalent of the C struct array
+    const schools = [
+        { name: "Tyler ISD", district: "East Texas", representative: "Matt", deliveryDay: "As Needed" },
+        { name: "Longview ISD", district: "East Texas", representative: "Matt", deliveryDay: "As Needed" },
+        { name: "Woodcreek Ms", district: "Humble ISD - South", representative: "Taki", deliveryDay: "Monday" },
+        { name: "Summercreek HS", district: "Humble ISD - South", representative: "Taki", deliveryDay: "Monday" },
+        { name: "Cyfair HS", district: "Cy Fair ISD", representative: "Tony", deliveryDay: "Monday" },
+        { name: "Atascocita HS", district: "Humble ISD - South", representative: "Taki", deliveryDay: "Monday" },
+        { name: "Clear Lake HS", district: "Clear Creek ISD", representative: "Stuart", deliveryDay: "Friday" },
+        { name: "Shadow Creek HS", district: "Alvin ISD", representative: "Brian", deliveryDay: "Friday" },
+        { name: "Spring Forest Ms", district: "Spring Branch ISD", representative: "Taki", deliveryDay: "Friday" },
+        { name: "Clements HS", district: "Fort Bend ISD", representative: "Brian", deliveryDay: "Tuesday" }
+    ];
+
+    function findSchool() {
+        let input = document.getElementById("schoolInput").value.trim();
+        let resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "";  // Clear previous result
+
+        if (input === "") {
+            resultDiv.innerHTML = "<p>Please enter a school name.</p>";
+            return;
+        }
+
+        let found = false;
+        let mattFound = false;
+        let results = "<h3>Results:</h3>";
+
+        schools.forEach(school => {
+            if (school.name.toLowerCase() === input.toLowerCase()) {
+                found = true;
+                results += `
+                    <p><strong>School:</strong> ${school.name}</p>
+                    <p><strong>District:</strong> ${school.district}</p>
+                    <p><strong>Representative:</strong> ${school.representative}</p>
+                    <p><strong>Delivery Day:</strong> ${school.deliveryDay}</p>
+                    <hr>`;
+
+                if (school.representative === "Matt") {
+                    mattFound = true;
+                }
+            }
+        });
+
+        if (!found) {
+            resultDiv.innerHTML = "<p>School not found. Please check the name and try again.</p>";
+        } else {
+            resultDiv.innerHTML = results;
+
+            if (mattFound) {
+                resultDiv.innerHTML += `<p style="color: red;"><strong>⚠️ Warning:</strong> Deliveries for East Texas (Matt) vary. Please ask for the delivery date.</p>`;
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
