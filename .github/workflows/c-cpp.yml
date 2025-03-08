@@ -1,0 +1,456 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_SCHOOLS 250  // Adjusted for all schools
+
+// Define a structure to hold school information
+typedef struct {
+    char name[80];
+    char district[80];
+    char representative[80];
+    char deliveryDay[80];
+} School;
+
+// Function to find and display school details
+void findSchool(School schools[], int size, char inputSchool[]) {
+    int found = 0; // Track if at least one match is found
+    int mattFound = 0; // Track if a school is under Matt's deliveries
+
+    printf("\nSearching for: %s\n", inputSchool);
+
+    for (int i = 0; i < size; i++) {
+        if (strcmp(schools[i].name, inputSchool) == 0) {
+            // Display school details
+            printf("\n--- Match Found ---\n");
+            printf("School: %s\n", schools[i].name);
+            printf("District: %s\n", schools[i].district);
+            printf("Representative: %s\n", schools[i].representative);
+            printf("Delivery Day: %s\n", schools[i].deliveryDay);
+            found = 1;
+
+            // Check if Matt is the representative to trigger a warning
+            if (strcmp(schools[i].representative, "Matt") == 0) {
+                mattFound = 1;
+            }
+        }
+    }
+
+    if (!found) {
+        printf("\nSchool not found. Please check the name and try again.\n");
+    } else if (mattFound) {
+        printf("\n⚠️ Warning: Deliveries for East Texas (Matt) vary. Please ask for the delivery date.\n");
+    } else {
+        printf("\n⚠️ Warning: Multiple districts may have a school with the same name. Verify the district!\n");
+    }
+}
+
+int main() {
+    // Updated array of schools
+    School schools[] = {
+        // Matt - East Texas (No Specific Delivery Days)
+        {"Tyler ISD", "East Texas", "Matt", "As Needed"},
+        {"Longview ISD", "East Texas", "Matt", "As Needed"},
+        {"Bishop T.K. Gorman", "East Texas", "Matt", "As Needed"},
+        {"Brookhill School", "East Texas", "Matt", "As Needed"},
+        {"Cumberland El", "East Texas", "Matt", "As Needed"},
+        {"Cumberland Ms", "East Texas", "Matt", "As Needed"},
+        {"Cumberland HS", "East Texas", "Matt", "As Needed"},
+        {"Grace Community", "East Texas", "Matt", "As Needed"},
+        {"Christian Heritage", "East Texas", "Matt", "As Needed"},
+        {"Regents Academy", "East Texas", "Matt", "As Needed"},
+        {"SFA University", "East Texas", "Matt", "As Needed"},
+        {"SFA Music Prep", "East Texas", "Matt", "As Needed"},
+        {"Private Teacher - Jamie Reason", "East Texas", "Matt", "As Needed"},
+
+        // Taki - Monday (Humble ISD - South)
+        {"Woodcreek Ms", "Humble ISD - South", "Taki", "Monday"},
+        {"Summercreek HS", "Humble ISD - South", "Taki", "Monday"},
+        {"Atascocita HS", "Humble ISD - South", "Taki", "Monday"},
+        {"Atascocita Ms", "Humble ISD - South", "Taki", "Monday"},
+        {"Humble Ms", "Humble ISD - South", "Taki", "Monday"},
+        {"West Lake Ms", "Humble ISD - South", "Taki", "Monday"},
+        {"Autumn Ridge Ms", "Humble ISD - South", "Taki", "Monday"},
+
+        // Brian - Monday (Houston ISD & Aldine ISD as needed)
+        {"All Schools", "Houston ISD", "Brian", "As Needed"},
+        {"Aldine ISD", "Aldine ISD", "Brian", "As Needed"},
+        {"Lamar Consolidated ISD", "Lamar ISD", "Brian", "As Needed"},
+
+        // Tony - Monday (Cy Fair ISD)
+        {"Cyfair HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Cy Ranch HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Smith Ms", "Cy Fair ISD", "Tony", "Monday"},
+        {"Cy Springs HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Sprague Ms", "Cy Fair ISD", "Tony", "Monday"},
+        {"Lee El", "Cy Fair ISD", "Tony", "Monday"},
+        {"Brosnahan El", "Cy Fair ISD", "Tony", "Monday"},
+        {"Rowe Ms", "Cy Fair ISD", "Tony", "Monday"},
+        {"Cy Park HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Goodson Ms", "Cy Fair ISD", "Tony", "Monday"},
+        {"Cy Lakes HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Labay Ms", "Cy Fair ISD", "Tony", "Monday"},
+        {"Cy Wood HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Cy Falls HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Truitt Ms", "Cy Fair ISD", "Tony", "Monday"},
+        {"Cook Ms", "Cy Fair ISD", "Tony", "Monday"},
+        {"Jersey Village HS", "Cy Fair ISD", "Tony", "Monday"},
+        {"Dean Ms", "Cy Fair ISD", "Tony", "Monday"},
+        
+        // Stuart - Monday
+        {"Cardiff JH", "Katy ISD", "Stuart", "Monday"},
+        {"Mayde Creek JH", "Katy ISD", "Stuart", "Monday"},
+        {"Katy JH", "Katy ISD", "Stuart", "Monday"},
+        {"Morton Ranch JH", "Katy ISD", "Stuart", "Monday"},
+        {"Morton Ranch HS", "Katy ISD", "Stuart", "Monday"},
+        {"McDonald JH", "Katy ISD", "Stuart", "Monday"},
+        {"Mayde Creek HS", "Katy ISD", "Stuart", "Monday"},
+        {"Haskett JH", "Katy ISD", "Stuart", "Monday"},
+        {"Katy HS", "Katy ISD", "Stuart", "Monday"},
+        {"Stockdick JH", "Katy ISD", "Stuart", "Monday"},
+        {"Paetow HS", "Katy ISD", "Stuart", "Monday"},
+        {"Freeman HS", "Katy ISD", "Stuart", "Monday"},
+        {"Nelson JH", "Katy ISD", "Stuart", "Monday"},
+        {"Hopper Ms (Cy-Fair)", "Katy ISD", "Stuart", "Monday"},
+        
+        //Leo -Monday
+        {"Milstead Ms", "Pasadena ISD", "Leo", "Monday"},
+        {"South Houston HS", "Pasadena ISD", "Leo", "Monday"},
+        {"Miller Int", "Pasadena ISD", "Leo", "Monday"},
+        {"Bondy Int", "Pasadena ISD", "Leo", "Monday"},
+        {"Pasadena Mem HS", "Pasadena ISD", "Leo", "Monday"},
+        {"Carter Lomax Ms", "Pasadena ISD", "Leo", "Monday"},
+        {"Fred Roberts Ms", "Pasadena ISD", "Leo", "Monday"},
+        {"Thompson Int", "Pasadena ISD", "Leo", "Monday"},
+        {"Morris Ms", "Pasadena ISD", "Leo", "Monday"},
+        {"Dobie HS", "Pasadena ISD", "Leo", "Monday"},
+        {"Melillo Ms", "Pasadena ISD", "Leo", "Monday"},
+        {"Beverly Hills Int", "Pasadena ISD", "Leo", "Monday"},
+        
+        //Taki-tuesday 
+        {"Albright Ms", "Alief ISD", "Taki", "Tuesday"},
+        {"Alief Ms", "Alief ISD", "Taki", "Tuesday"},
+        {"Budewig Int.", "Alief ISD", "Taki", "Tuesday"},
+        {"Elsik HS", "Alief ISD", "Taki", "Tuesday"},
+        {"Hastings HS", "Alief ISD", "Taki", "Tuesday"},
+        {"Holub Ms", "Alief ISD", "Taki", "Tuesday"},
+        {"Kerr HS", "Alief ISD", "Taki", "Tuesday"},
+        {"Klentzman Int.", "Alief ISD", "Taki", "Tuesday"},
+        {"Killough Ms", "Alief ISD", "Taki", "Tuesday"},
+        {"Mata Int.", "Alief ISD", "Taki", "Tuesday"},
+        {"Miller Int.", "Alief ISD", "Taki", "Tuesday"},
+        {"O'Donnell Ms", "Alief ISD", "Taki", "Tuesday"},
+        {"Olle Ms", "Alief ISD", "Taki", "Tuesday"},
+        {"Owens Int.", "Alief ISD", "Taki", "Tuesday"},
+        {"Taylor HS", "Alief ISD", "Taki", "Tuesday"},
+        {"Youngblood Int.", "Alief ISD", "Taki", "Tuesday"},
+        
+        //Brian-tuesday
+        {"Bush HS", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Austin HS", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Garcia Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Hodges Bend Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Crockett Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Travis HS", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Bowie Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Sartartia Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Cornerstone Christian Academy", "Private", "Brian", "Tuesday"},
+{"Clements HS", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Fort Settlement Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+{"First Colony Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Kempner HS", "Fort Bend ISD", "Brian", "Tuesday"},
+{"Sugarland Ms", "Fort Bend ISD", "Brian", "Tuesday"},
+
+        //Tony-Tuesday
+        {"Coulson Tough El", "Conroe ISD", "Tony", "Tuesday"},
+{"Deretchin El", "Conroe ISD", "Tony", "Tuesday"},
+{"York JH", "Conroe ISD", "Tony", "Tuesday"},
+{"Clark Int.", "Conroe ISD", "Tony", "Tuesday"},
+{"Tom Cox Int.", "Conroe ISD", "Tony", "Tuesday"},
+{"Collins Int.", "Conroe ISD", "Tony", "Tuesday"},
+{"Woodlands HS", "Conroe ISD", "Tony", "Tuesday"},
+{"Wilkerson Int.", "Conroe ISD", "Tony", "Tuesday"},
+{"Vogel Int.", "Conroe ISD", "Tony", "Tuesday"},
+{"Oak Ridge HS", "Conroe ISD", "Tony", "Tuesday"},
+{"College Park HS", "Conroe ISD", "Tony", "Tuesday"},
+{"Mitchell Int.", "Conroe ISD", "Tony", "Tuesday"},
+{"McCullough JH", "Conroe ISD", "Tony", "Tuesday"},
+{"Knox JH", "Conroe ISD", "Tony", "Tuesday"},
+
+        //Stuart-Tuesday
+        {"Seabrook Int", "Clear Creek ISD", "Stuart", "Tuesday"},
+        {"Bayside Int", "Clear Creek ISD", "Stuart", "Tuesday"},
+        {"Clear Falls HS", "Clear Creek ISD", "Stuart", "Tuesday"},
+        {"League City Int. ", "Clear Creek ISD", "Stuart", "Tuesday"},
+        {"Clear Creek HS ", "Clear Creek ISD", "Stuart", "Tuesday"},
+        {"Clear Creek Int ", "Clear Creek ISD", "Stuart", "Tuesday"},
+        //Leo-Tuesday
+         {"San Jacinto Int", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Kendrick Ms", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Park View Int", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Rayburn HS", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Keller Ms", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Bobby Shaw Ms", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Jackson Int", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Pasadena HS", "Pasadena ISD", "Leo", "Tuesday"},
+        {"DeZavala Ms", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Sullivan Ms", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Queens Int", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Rick Schneider Ms", "Pasadena ISD", "Leo", "Tuesday"},
+        {"Southmore Int", "Pasadena ISD", "Leo", "Tuesday"},
+        {"South Houston Int", "Pasadena ISD", "Leo", "Tuesday"},
+        //Taki-Wed
+        {"Humble HS", "Humble ISD - North", "Taki", "Wednesday"},
+{"Ross Sterling Ms", "Humble ISD - North", "Taki", "Wednesday"},
+{"Timberwood Ms", "Humble ISD - North", "Taki", "Wednesday"},
+{"Kingwood Ms", "Humble ISD - North", "Taki", "Wednesday"},
+{"Creekwood Ms", "Humble ISD - North", "Taki", "Wednesday"},
+{"Riverwood Ms", "Humble ISD - North", "Taki", "Wednesday"},
+{"Kingwood Park HS", "Humble ISD - North", "Taki", "Wednesday"},
+{"Kingwood HS", "Humble ISD - North", "Taki", "Wednesday"},
+
+        //Brian-wed
+        {"Willowridge HS", "Fort Bend ISD", "Brian", "Wednesday"},
+{"McAuliffe Ms", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Hightower HS", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Crawford HS", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Ronald Thornton Ms", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Ridge Point HS", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Baines Ms", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Elkins HS", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Lake Olympia Ms", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Quail Valley Ms", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Marshall HS", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Missouri City Ms", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Dulles HS", "Fort Bend ISD", "Brian", "Wednesday"},
+{"Dulles Ms", "Fort Bend ISD", "Brian", "Wednesday"},
+
+        //Tony-Wed
+        {"Pine Valley Ms", "New Caney ISD", "Tony", "Wednesday"},
+{"Keefer Crossing Ms", "New Caney ISD", "Tony", "Wednesday"},
+{"White Oak Ms", "New Caney ISD", "Tony", "Wednesday"},
+{"Woodridge Forest Ms", "New Caney ISD", "Tony", "Wednesday"},
+{"New Caney HS", "New Caney ISD", "Tony", "Wednesday"},
+{"Porter HS", "New Caney ISD", "Tony", "Wednesday"},
+{"West Fork HS", "New Caney ISD", "Tony", "Wednesday"},
+
+{"Creekside Park JH", "Tomball ISD", "Tony", "Wednesday"},
+{"Grand Lakes JH", "Tomball ISD", "Tony", "Wednesday"},
+{"Willow Wood JH", "Tomball ISD", "Tony", "Wednesday"},
+{"Northpointe Int.", "Tomball ISD", "Tony", "Wednesday"},
+{"Tomball Int.", "Tomball ISD", "Tony", "Wednesday"},
+{"Tomball JH", "Tomball ISD", "Tony", "Wednesday"},
+{"Tomball HS", "Tomball ISD", "Tony", "Wednesday"},
+{"Oak Crest Int.", "Tomball ISD", "Tony", "Wednesday"},
+
+        //Stuart-Wed
+        {"Bonnette JH", "Deer Park ISD  ", "Stuart", "Wednesday"},
+        {"Deer Park JH", "Deer Park ISD  ", "Stuart", "Wednesday"},
+        {"Fairmont JH ", "Deer Park ISD  ", "Stuart", "Wednesday"},
+        {"Deer Park HS", "Deer Park ISD  ", "Stuart", "Wednesday"},
+        {"La Porte HS (LPISD)", "Deer Park ISD  ", "Stuart", "Wednesday"},
+        {"Baytown Jr", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Cedar Bayou Jr", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Green Jr", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Gentry Jr", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Highlands Jr", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Gentry Jr", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Horace Mann Jr", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Lee HS ", "Goose Creek ISD", "Stuart", "Wednesday"},
+        {"Sterling HS", "Goose Creek ISD", "Stuart", "Wednesday"},
+         {"Baytown Christian", "Baytown Christian (private)", "Stuart", "Wednesday"},
+        //Leo-Wed
+        
+        //Taki-Thur
+        {"Klein Collins HS", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Zwink El", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Fox El", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Strack Int.", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Benfer El", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Haude El", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Lemm El", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Schindewolf Int.", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Kreinhop El", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+{"Roth El", "Klein ISD - Collins Cluster", "Taki", "Thursday"},
+
+{"Klein Forest HS", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Eiland El", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Klenk El", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Klein Int.", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Epps Island El", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Nitsch El", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Wunderlich Int.", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Greenwood Forest El", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"McDougle El", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+{"Kaiser El", "Klein ISD - Forest Cluster", "Taki", "Thursday"},
+
+{"Klein HS", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Brill El", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Kuehnle El", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Kleb Int.", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Mittelstadt El", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Ehrhardt El", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Krimmel Int.", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Benignus El", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+{"Mueller El", "Klein ISD - Klein Cluster", "Taki", "Thursday"},
+
+{"Hildebrandt Int.", "Klein ISD - Oak Cluster", "Taki", "Thursday"},
+{"Northampton El", "Klein ISD - Oak Cluster", "Taki", "Thursday"},
+{"Schultz El", "Klein ISD - Oak Cluster", "Taki", "Thursday"},
+{"Hofius Int.", "Klein ISD - Oak Cluster", "Taki", "Thursday"},
+{"Metzler El", "Klein ISD - Oak Cluster", "Taki", "Thursday"},
+{"Mahaffey El", "Klein ISD - Oak Cluster", "Taki", "Thursday"},
+{"French El", "Klein ISD - Oak Cluster", "Taki", "Thursday"},
+
+{"Klein Cain HS", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Krahn El", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Kohrville El", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Doerre Int.", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Frank El", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Hassler El", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Theiss El", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Ulrich Int.", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Blackshear El", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+{"Bernshausen El", "Klein ISD - Cain Cluster", "Taki", "Thursday"},
+
+        
+        //Brian-Thur
+        {"Pecan Trail Int.", "College Station ISD", "Brian", "Thursday"},
+{"Wellborn Ms", "College Station ISD", "Brian", "Thursday"},
+{"College Station HS", "College Station ISD", "Brian", "Thursday"},
+{"Cypress Grove Int.", "College Station ISD", "Brian", "Thursday"},
+{"College Station Ms", "College Station ISD", "Brian", "Thursday"},
+{"AMCHS", "College Station ISD", "Brian", "Thursday"},
+{"Oakwood Int.", "College Station ISD", "Brian", "Thursday"},
+{"AMCMs", "College Station ISD", "Brian", "Thursday"},
+
+{"Bryan HS", "Bryan ISD", "Brian", "Thursday"},
+{"Sam Rayburn Ms", "Bryan ISD", "Brian", "Thursday"},
+{"Rudder HS", "Bryan ISD", "Brian", "Thursday"},
+{"Davila Ms", "Bryan ISD", "Brian", "Thursday"},
+{"Stephen F. Austin Ms", "Bryan ISD", "Brian", "Thursday"},
+{"Jane Long Ms", "Bryan ISD", "Brian", "Thursday"},
+
+        //Tony-Thur
+        {"Anthony Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Kahla Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Langham Creek HS", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Thornton Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Cy Ridge HS", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Watkins Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Aragon Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Arnold Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Spillane Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Bleyl Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Campbell Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Cy Creek HS", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Hamilton Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Salyards Ms", "Cy-Fair ISD", "Tony", "Thursday"},
+{"Bridgeland HS", "Cy-Fair ISD", "Tony", "Thursday"},
+
+        //Stuart-Thur
+        {"Memorial Parkway JH", "Katy ISD South", "Stuart", "Thursday"},
+        {"Beckendorff JH", "Katy ISD South", "Stuart", "Thursday"},
+        {"Seven Lakes HS", "Katy ISD South", "Stuart", "Thursday"},
+        {"Seven Lakes JH", "Katy ISD South", "Stuart", "Thursday"},
+        {"Adams JH", "Katy ISD South", "Stuart", "Thursday"},
+        {"Jordan HS", "Katy ISD South", "Stuart", "Thursday"},
+        {"Tompkins HS", "Katy ISD South", "Stuart", "Thursday"},
+        {"McMeans JH", "Katy ISD South", "Stuart", "Thursday"},
+        {"Cinco Ranch JH", "Katy ISD South", "Stuart", "Thursday"},
+        {"Cinco Ranch HS", "Katy ISD South", "Stuart", "Thursday"},
+        {"Beck JH", "Katy ISD South", "Stuart", "Thursday"},
+        {"Taylor HS", "Katy ISD South", "Stuart", "Thursday"},
+        {"West Memorial JH", "Katy ISD South", "Stuart", "Thursday"},
+        //LEO-Thur and Fri
+        // Thursday-Friday - Central Texas Deliveries
+        {"Belton HS", "Belton ISD", "Central Texas", "Thursday-Friday"},
+        {"Belton Ms", "Belton ISD", "Central Texas", "Thursday-Friday"},
+        {"North Belton Ms", "Belton ISD", "Central Texas", "Thursday-Friday"},
+        {"Lake Belton HS", "Belton ISD", "Central Texas", "Thursday-Friday"},
+        {"Lake Belton Ms", "Belton ISD", "Central Texas", "Thursday-Friday"},
+        {"South Belton Ms", "Belton ISD", "Central Texas", "Thursday-Friday"},
+        {"Harker Heights HS", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"Union Grove Ms", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"Liberty Hill Ms", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"Nolan Ms", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"Eastern Hills Ms", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"Chaparral HS", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"Patterson Ms", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"Roy Smith Ms", "Killeen ISD", "Central Texas", "Thursday-Friday"},
+        {"University HS", "Waco ISD", "Central Texas", "As Needed"},
+        {"Waco HS", "Waco ISD", "Central Texas", "As Needed"},
+        {"Midway HS", "Midway ISD", "Central Texas", "Thursday-Friday"},
+        {"Temple HS", "Temple ISD", "Central Texas", "Thursday-Friday"},
+        {"Vanguard College Prep", "Private", "Central Texas", "As Needed"},
+        
+        //Taki-Fri
+        {"Landrum Ms", "Spring Branch ISD", "Taki", "Friday"},
+{"Memorial HS", "Spring Branch ISD", "Taki", "Friday"},
+{"Memorial Ms", "Spring Branch ISD", "Taki", "Friday"},
+{"Northbrook HS", "Spring Branch ISD", "Taki", "Friday"},
+{"Northbrook Ms", "Spring Branch ISD", "Taki", "Friday"},
+{"Spring Branch Ms", "Spring Branch ISD", "Taki", "Friday"},
+{"Spring Oaks Ms", "Spring Branch ISD", "Taki", "Friday"},
+{"Spring Woods HS", "Spring Branch ISD", "Taki", "Friday"},
+{"Spring Woods Ms", "Spring Branch ISD", "Taki", "Friday"},
+{"Spring Forest Ms", "Spring Branch ISD", "Taki", "Friday"},
+{"Stratford HS", "Spring Branch ISD", "Taki", "Friday"},
+
+        //Brian-Fri
+        {"Brazosport Christian School", "Private", "Brian", "Friday"},
+
+{"Lake Jackson Int.", "Brazosport ISD", "Brian", "Friday"},
+{"Clute Int.", "Brazosport ISD", "Brian", "Friday"},
+{"Rasco Ms", "Brazosport ISD", "Brian", "Friday"},
+{"Brazoswood HS", "Brazosport ISD", "Brian", "Friday"},
+{"Clute Int.", "Brazosport ISD", "Brian", "Friday"},
+
+{"Shadow Creek HS", "Alvin ISD", "Brian", "Friday"},
+{"Nolan Ryan JH", "Alvin ISD", "Brian", "Friday"},
+
+        //Tony-Fri
+        {"Conroe HS", "Conroe ISD", "Tony", "Friday"},
+{"Irons JH", "Conroe ISD", "Tony", "Friday"},
+{"Grangerland Int.", "Conroe ISD", "Tony", "Friday"},
+{"Caney Creek HS", "Conroe ISD", "Tony", "Friday"},
+{"Veterans Memorial Int.", "Conroe ISD", "Tony", "Friday"},
+{"Moorhead JH", "Conroe ISD", "Tony", "Friday"},
+{"Bozman Int.", "Conroe ISD", "Tony", "Friday"},
+{"Travis Int.", "Conroe ISD", "Tony", "Friday"},
+{"Washington JH", "Conroe ISD", "Tony", "Friday"},
+{"Cryar Int.", "Conroe ISD", "Tony", "Friday"},
+{"Peet JH", "Conroe ISD", "Tony", "Friday"},
+{"Suchma El", "Conroe ISD", "Tony", "Friday"},
+{"Stockton JH", "Conroe ISD", "Tony", "Friday"},
+{"Grand Oaks HS", "Conroe ISD", "Tony", "Friday"},
+
+        
+        //Stuart-Fri
+        {"Clear Lake HS", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Space Center Int", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Brookside Int", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Clear Brook HS", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Westbrook Int", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Victory Lakes Int", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Clear Springs HS", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Creekside Int", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Clear Lake Int.", "Clear Creek ISD", "Stuart", "Friday"},
+        {"Bay Area Christian", "Private", "Stuart", "As Needed"},
+        
+        
+    };
+
+    int totalSchools = sizeof(schools) / sizeof(schools[0]); // Automatically detect array size
+
+    char inputSchool[80];
+
+    // Get user input
+    printf("Enter the name of the school (Middle Schools Ms,Intermidiate as Int., Highschool as HS) : ");
+    fgets(inputSchool, sizeof(inputSchool), stdin);
+    inputSchool[strcspn(inputSchool, "\n")] = 0; // Remove newline character
+
+    // Find and display school information
+    findSchool(schools, totalSchools, inputSchool);
+
+    return 0;
+}
